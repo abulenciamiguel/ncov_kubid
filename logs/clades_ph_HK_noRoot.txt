@@ -1,0 +1,42 @@
+Validating schema of 'results/ph_HK_noRoot/nt_muts.json'...
+Validating schema of 'results/ph_HK_noRoot/aa_muts.json'...
+WARNING in augur.clades: sequences at the root node have not been specified for {ORF1a, ORF9b, ORF8, ORF3a, E, ORF6, ORF7b, ORF7a, ORF1b, M, N, S}, even though mutations were observed. Clades which are annotated using bases/codons present at the root of the tree may not be correctly inferred.
+WARNING in augur.clades: clade '21M (Omicron)' not found in tree!
+WARNING in augur.clades: clade '21D (Eta)' not found in tree!
+WARNING in augur.clades: clade '20G' not found in tree!
+WARNING in augur.clades: clade '20H (Beta)' not found in tree!
+WARNING in augur.clades: clade '23F (EG.5.1)' not found in tree!
+WARNING in augur.clades: clade '20A' not found in tree!
+WARNING in augur.clades: clade '21C (Epsilon)' not found in tree!
+WARNING in augur.clades: clade '23C (CH.1.1)' not found in tree!
+WARNING in augur.clades: clade '21J (Delta)' not found in tree!
+WARNING in augur.clades: clade '22C (BA.2.12.1)' not found in tree!
+WARNING in augur.clades: clade '21H (Mu)' not found in tree!
+WARNING in augur.clades: clade '20I (Alpha)' not found in tree!
+WARNING in augur.clades: clade '20J (Gamma)' not found in tree!
+WARNING in augur.clades: clade '20F' not found in tree!
+WARNING in augur.clades: clade '22F (XBB)' not found in tree!
+WARNING in augur.clades: clade '21G (Lambda)' not found in tree!
+WARNING in augur.clades: clade '23B (XBB.1.16)' not found in tree!
+WARNING in augur.clades: clade '21E (Theta)' not found in tree!
+WARNING in augur.clades: clade '20C' not found in tree!
+WARNING in augur.clades: clade '22B (BA.5)' not found in tree!
+WARNING in augur.clades: clade '21K (BA.1)' not found in tree!
+WARNING in augur.clades: clade '21A (Delta)' not found in tree!
+WARNING in augur.clades: clade '19B' not found in tree!
+WARNING in augur.clades: clade '22D (BA.2.75)' not found in tree!
+WARNING in augur.clades: clade '20D' not found in tree!
+WARNING in augur.clades: clade '23A (XBB.1.5)' not found in tree!
+WARNING in augur.clades: clade '21F (Iota)' not found in tree!
+WARNING in augur.clades: clade '21I (Delta)' not found in tree!
+WARNING in augur.clades: clade '19A' not found in tree!
+WARNING in augur.clades: clade '21B (Kappa)' not found in tree!
+WARNING in augur.clades: clade '22E (BQ.1)' not found in tree!
+WARNING in augur.clades: clade '23D (XBB.1.9)' not found in tree!
+WARNING in augur.clades: clade '22A (BA.4)' not found in tree!
+WARNING in augur.clades: clade '23E (XBB.2.3)' not found in tree!
+WARNING in augur.clades: clade '21L (BA.2)' not found in tree!
+WARNING in augur.clades: clade '20E' not found in tree!
+Clade membership stored on nodes → <node_name> → clade_membership
+Clade labels stored on branches → <node_name> → labels → clade
+Clades written to results/ph_HK_noRoot/clades.json

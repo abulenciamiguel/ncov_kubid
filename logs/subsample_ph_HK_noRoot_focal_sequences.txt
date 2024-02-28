@@ -1,0 +1,5 @@
+1098 strains were dropped during filtering
+	2 of these were dropped because they were in defaults/exclude.txt
+	676 of these were dropped because of 'country!=Philippines'
+	420 of these were dropped because of subsampling criteria
+682 strains passed all filters

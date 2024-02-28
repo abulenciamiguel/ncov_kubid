@@ -1,0 +1,35 @@
+augur refine is using TreeTime version 0.11.1
+
+11.14	TreeTime.reroot: with method or node: least-squares
+
+11.14	TreeTime.reroot: rerooting will ignore covariance and shared ancestry.
+
+12.18	TreeTime.reroot: with method or node: least-squares
+
+12.18	TreeTime.reroot: rerooting will ignore covariance and shared ancestry.
+
+28.93	TreeTime.reroot: with method or node: least-squares
+
+28.93	TreeTime.reroot: rerooting will ignore covariance and shared ancestry.
+
+38.91	###TreeTime.run: INITIAL ROUND
+
+65.87	TreeTime.reroot: with method or node: least-squares
+
+65.87	TreeTime.reroot: rerooting will ignore covariance and shared ancestry.
+
+66.71	###TreeTime.run: rerunning timetree after rerooting
+
+98.35	###TreeTime.run: ITERATION 1 out of 2 iterations
+
+158.76	###TreeTime.run: ITERATION 2 out of 2 iterations
+
+367.11	###TreeTime.run: FINAL ROUND - confidence estimation via marginal
+      	reconstruction
+
+Inferred a time resolved phylogeny using TreeTime:
+	Sagulenko et al. TreeTime: Maximum-likelihood phylodynamic analysis
+	Virus Evolution, vol 4, https://academic.oup.com/ve/article/4/1/vex042/4794731
+
+updated tree written to results/ph_HK_noRoot/tree.nwk
+node attributes written to results/ph_HK_noRoot/branch_lengths.json

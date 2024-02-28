@@ -1,0 +1,60 @@
+WARNING: results/ph_HK_noRoot/rbd_levels.json has empty or nonexistent `nodes` and `branches`. Please check the formatting of this JSON!
+WARNING: You asked for a color-by for trait 'immune_escape', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'ace2_binding', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'logistic_growth', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'age', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'author', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'originating_lab', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'submitting_lab', but it has no values on the tree. It has been ignored.
+
+WARNING: You asked for a color-by for trait 'genbank_accession', but it has no values on the tree. It has been ignored.
+
+WARNING: You've supplied a colors file with information for emerging_lineage but none of the values found on the tree had associated colors. Auspice will generate its own color scale for this trait.
+
+WARNING: These values for trait location were not specified in the colors file you provided:
+	anchorage-mat su.
+	Auspice will create colors for them.
+
+WARNING: These values for trait division were not specified in the colors file you provided:
+	national capital region, reykjavik, deurne, davao, region iv-a.
+	Auspice will create colors for them.
+
+WARNING: These values for trait country were not specified in the colors file you provided:
+	northern mariana islands.
+	Auspice will create colors for them.
+
+WARNING: location->Southwest did not have an associated lat/long value (matching performed in lower case). Auspice won't be able to display this location.
+
+WARNING: location->Anchorage-Mat Su did not have an associated lat/long value (matching performed in lower case). Auspice won't be able to display this location.
+
+WARNING: division->Deurne did not have an associated lat/long value (matching performed in lower case). Auspice won't be able to display this location.
+
+WARNING: division->Region IV-A did not have an associated lat/long value (matching performed in lower case). Auspice won't be able to display this location.
+
+WARNING: division->Davao did not have an associated lat/long value (matching performed in lower case). Auspice won't be able to display this location.
+
+	WARNING:  "Southwest", a value of the geographic resolution "location", appears in the tree but not in the metadata.
+		This will cause transmissions & demes involving this location not to be displayed in Auspice
+	WARNING:  "Anchorage-Mat Su", a value of the geographic resolution "location", appears in the tree but not in the metadata.
+		This will cause transmissions & demes involving this location not to be displayed in Auspice
+	WARNING:  "Deurne", a value of the geographic resolution "division", appears in the tree but not in the metadata.
+		This will cause transmissions & demes involving this location not to be displayed in Auspice
+	WARNING:  "Region IV-A", a value of the geographic resolution "division", appears in the tree but not in the metadata.
+		This will cause transmissions & demes involving this location not to be displayed in Auspice
+	WARNING:  "Davao", a value of the geographic resolution "division", appears in the tree but not in the metadata.
+		This will cause transmissions & demes involving this location not to be displayed in Auspice
+Validating schema of 'results/ph_HK_noRoot/nt_muts.json'...
+Validating schema of 'results/ph_HK_noRoot/aa_muts.json'...
+Validating config file defaults/auspice_config.json against the JSON schema
+Validating schema of 'defaults/auspice_config.json'...
+Validating produced JSON
+Validating schema of 'results/ph_HK_noRoot/ncov_with_accessions.json'...
+Validating that the JSON is internally consistent...
+Validation of 'results/ph_HK_noRoot/ncov_with_accessions.json' succeeded, but there were warnings you may want to resolve.
+

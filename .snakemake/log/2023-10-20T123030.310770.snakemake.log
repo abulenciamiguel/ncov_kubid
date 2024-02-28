@@ -1,0 +1,380 @@
+Config file defaults/parameters.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /home/mbl-miguel/.nextstrain/runtimes/conda/env/bin/bash
+Provided cores: 448
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Job stats:
+job                               count
+------------------------------  -------
+adjust_metadata_regions               1
+align                                 1
+all                                   1
+ancestral                             1
+annotate_metadata_with_index          1
+assign_rbd_levels                     1
+build_align                           1
+build_description                     1
+calculate_epiweeks                    1
+clade_files                           1
+clades                                1
+colors                                1
+combine_samples                       1
+diagnostic                            1
+distances                             1
+emerging_lineages                     1
+export                                1
+extract_subsampled_sequences          1
+filter                                1
+finalize                              1
+include_hcov19_prefix                 1
+index                                 1
+index_sequences                       1
+join_metadata_and_nextclade_qc        1
+logistic_growth                       1
+mask                                  1
+mutational_fitness                    1
+prepare_nextclade                     1
+priority_score                        1
+proximity_score                       1
+recency                               1
+refine                                1
+sanitize_metadata                     1
+subsample                             2
+tip_frequencies                       1
+traits                                1
+translate                             1
+tree                                  1
+total                                39
+
+Select jobs to execute...
+
+[Fri Oct 20 12:30:30 2023]
+rule sanitize_metadata:
+    input: /home/mbl-miguel/thorney_rerun/preprocess/GISAID.metadata_HK.Date.Coverage.Lineage.tsv
+    output: results/sanitized_metadata_gisaid_data.tsv.xz
+    log: logs/sanitize_metadata_gisaid_data.txt
+    jobid: 11
+    benchmark: benchmarks/sanitize_metadata_gisaid_data.txt
+    reason: Missing output files: results/sanitized_metadata_gisaid_data.tsv.xz
+    wildcards: origin=gisaid_data
+    resources: tmpdir=/tmp, mem_mb=2000, mem_mib=1908
+
+
+        python3 scripts/sanitize_metadata.py             --metadata /home/mbl-miguel/thorney_rerun/preprocess/GISAID.metadata_HK.Date.Coverage.Lineage.tsv             --metadata-id-columns strain name 'Virus name'             --database-id-columns 'Accession ID' gisaid_epi_isl genbank_accession             --parse-location-field Location             --rename-fields 'Virus name=strain' Type=type 'Accession ID=gisaid_epi_isl' 'Collection date=date' 'Additional location information=additional_location_information' 'Sequence length=length' Host=host 'Patient age=patient_age' Gender=sex Clade=GISAID_clade 'Pango lineage=pango_lineage' pangolin_lineage=pango_lineage Lineage=pango_lineage 'Pangolin version=pangolin_version' Variant=variant 'AA Substitutions=aaSubstitutions' 'Submission date=date_submitted' 'Is reference?=is_reference' 'Is complete?=is_complete' 'Is high coverage?=is_high_coverage' 'Is low coverage?=is_low_coverage' N-Content=n_content GC-Content=gc_content             --strip-prefixes hCoV-19/ SARS-CoV-2/                          --output results/sanitized_metadata_gisaid_data.tsv.xz 2>&1 | tee logs/sanitize_metadata_gisaid_data.txt
+        
+
+[Fri Oct 20 12:30:30 2023]
+rule clade_files:
+    input: defaults/clades.tsv
+    output: results/ph_HK_noRoot/clades.tsv
+    jobid: 27
+    benchmark: benchmarks/clade_files_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/clades.tsv
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/rename_clades.py --input-clade-files defaults/clades.tsv             --name-mapping defaults/clade_display_names.yml             --output-clades results/ph_HK_noRoot/clades.tsv
+        
+
+[Fri Oct 20 12:30:30 2023]
+Job 18: 
+        Downloading reference files for nextclade (used for alignment and qc).
+        
+Reason: Missing output files: data/sars-cov-2-nextclade-defaults.zip
+
+
+        nextclade --version
+        nextclade dataset get --name sars-cov-2 --output-zip data/sars-cov-2-nextclade-defaults.zip
+        
+
+[Fri Oct 20 12:30:30 2023]
+Job 10: 
+        Aligning sequences to defaults/reference_seq.fasta
+            - gaps relative to reference are considered real
+        
+Reason: Missing output files: results/aligned_gisaid_data.fasta.xz
+
+
+        python3 scripts/sanitize_sequences.py             --sequences /home/mbl-miguel/thorney_rerun/preprocess/HK.Date.Coverage.Lineage.fasta             --strip-prefixes hCoV-19/ SARS-CoV-2/             --output /dev/stdout 2> logs/sanitize_sequences_gisaid_data.txt             | nextalign run             --jobs=8             --reference defaults/reference_seq.fasta             --genemap defaults/annotation.gff             --output-translations results/translations/seqs_gisaid_data.gene.{gene}.fasta             --output-fasta results/aligned_gisaid_data.fasta             --output-insertions results/insertions_gisaid_data.tsv > logs/align_gisaid_data.txt 2>&1;
+        xz -2 -T 8 results/aligned_gisaid_data.fasta;
+        xz -2 -T 8 results/translations/seqs_gisaid_data.gene.*.fasta
+        
+
+[Fri Oct 20 12:30:30 2023]
+Job 38: Templating build description for Auspice
+Reason: Missing output files: results/ph_HK_noRoot/description.md
+
+[Fri Oct 20 12:30:31 2023]
+Finished job 27.
+1 of 39 steps (3%) done
+[Fri Oct 20 12:30:31 2023]
+Finished job 38.
+2 of 39 steps (5%) done
+[Fri Oct 20 12:30:32 2023]
+Finished job 11.
+3 of 39 steps (8%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:32 2023]
+Job 12: 
+        Subsample all sequences by 'focal_sequences' scheme for build 'ph_HK_noRoot' with the following parameters:
+
+         - group by: --group-by division year month
+         - sequences per group: --sequences-per-group 30
+         - subsample max sequences: 
+         - min-date: 
+         - max-date: --max-date 2022-02-28
+         - 
+         - exclude: --exclude-where 'country!=Philippines' 'host!=Human'
+         - include: 
+         - query: 
+         - priority: 
+        
+Reason: Missing output files: results/ph_HK_noRoot/sample-focal_sequences.txt; Input files updated by another job: results/sanitized_metadata_gisaid_data.tsv.xz
+
+
+        augur filter             --metadata results/sanitized_metadata_gisaid_data.tsv.xz             --include defaults/include.txt             --exclude defaults/exclude.txt                          --max-date 2022-02-28             --exclude-where 'country!=Philippines' 'host!=Human'                                                                 --group-by division year month             --sequences-per-group 30                                       --output-strains results/ph_HK_noRoot/sample-focal_sequences.txt 2>&1 | tee logs/subsample_ph_HK_noRoot_focal_sequences.txt
+        
+[Fri Oct 20 12:30:32 2023]
+Finished job 18.
+4 of 39 steps (10%) done
+[Fri Oct 20 12:30:33 2023]
+Finished job 12.
+5 of 39 steps (13%) done
+[Fri Oct 20 12:30:37 2023]
+Finished job 10.
+6 of 39 steps (15%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:37 2023]
+Job 17: 
+        Index sequence composition for faster filtering.
+        
+Reason: Missing output files: results/combined_sequence_index.tsv.xz; Input files updated by another job: results/aligned_gisaid_data.fasta.xz
+
+
+        python3 scripts/sanitize_sequences.py             --sequences results/aligned_gisaid_data.fasta.xz             --strip-prefixes hCoV-19/ SARS-CoV-2/             --output /dev/stdout 2> logs/sanitize_sequences_before_index.txt             | augur index             --sequences /dev/stdin             --output results/combined_sequence_index.tsv.xz 2>&1 | tee logs/index_sequences.txt
+        
+[Fri Oct 20 12:30:40 2023]
+Finished job 17.
+7 of 39 steps (18%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:40 2023]
+rule extract_subsampled_sequences:
+    input: results/sanitized_metadata_gisaid_data.tsv.xz, results/aligned_gisaid_data.fasta.xz, results/combined_sequence_index.tsv.xz, results/ph_HK_noRoot/sample-focal_sequences.txt
+    output: results/ph_HK_noRoot/sample-focal_sequences.fasta
+    log: logs/extract_subsampled_sequences_ph_HK_noRoot_focal_sequences.txt
+    jobid: 16
+    benchmark: benchmarks/extract_subsampled_sequences_ph_HK_noRoot_focal_sequences.txt
+    reason: Missing output files: results/ph_HK_noRoot/sample-focal_sequences.fasta; Input files updated by another job: results/aligned_gisaid_data.fasta.xz, results/ph_HK_noRoot/sample-focal_sequences.txt, results/sanitized_metadata_gisaid_data.tsv.xz, results/combined_sequence_index.tsv.xz
+    wildcards: build_name=ph_HK_noRoot, subsample=focal_sequences
+    resources: tmpdir=/tmp, mem_mb=4000, mem_mib=3815
+
+
+        augur filter             --metadata results/sanitized_metadata_gisaid_data.tsv.xz             --sequences results/aligned_gisaid_data.fasta.xz             --sequence-index results/combined_sequence_index.tsv.xz             --exclude-all             --include results/ph_HK_noRoot/sample-focal_sequences.txt             --output-sequences results/ph_HK_noRoot/sample-focal_sequences.fasta 2>&1 | tee logs/extract_subsampled_sequences_ph_HK_noRoot_focal_sequences.txt
+        
+[Fri Oct 20 12:30:41 2023]
+Finished job 16.
+8 of 39 steps (21%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:41 2023]
+Job 15: 
+        determine priority for inclusion in as phylogenetic context by
+        genetic similiarity to sequences in focal set for build 'ph_HK_noRoot'.
+        
+Reason: Missing output files: results/ph_HK_noRoot/proximity_focal_sequences.tsv; Input files updated by another job: results/aligned_gisaid_data.fasta.xz, results/ph_HK_noRoot/sample-focal_sequences.fasta
+
+
+        python3 scripts/get_distance_to_focal_set.py             --reference defaults/reference_seq.fasta             --alignment results/aligned_gisaid_data.fasta.xz             --focal-alignment results/ph_HK_noRoot/sample-focal_sequences.fasta             --ignore-seqs Wuhan-Hu-1/2019             --chunk-size 10000             --output results/ph_HK_noRoot/proximity_focal_sequences.tsv 2>&1 | tee logs/subsampling_proximity_ph_HK_noRoot_focal_sequences.txt
+        
+[Fri Oct 20 12:30:43 2023]
+Finished job 15.
+9 of 39 steps (23%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:43 2023]
+rule priority_score:
+    input: results/ph_HK_noRoot/proximity_focal_sequences.tsv, results/combined_sequence_index.tsv.xz
+    output: results/ph_HK_noRoot/priorities_focal_sequences.tsv
+    jobid: 14
+    benchmark: benchmarks/priority_score_ph_HK_noRoot_focal_sequences.txt
+    reason: Missing output files: results/ph_HK_noRoot/priorities_focal_sequences.tsv; Input files updated by another job: results/ph_HK_noRoot/proximity_focal_sequences.tsv, results/combined_sequence_index.tsv.xz
+    wildcards: build_name=ph_HK_noRoot, focus=focal_sequences
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/priorities.py             --sequence-index results/combined_sequence_index.tsv.xz             --proximities results/ph_HK_noRoot/proximity_focal_sequences.tsv             --crowding-penalty 0.1             --Nweight 0.003             --output results/ph_HK_noRoot/priorities_focal_sequences.tsv 2>&1 | tee 
+        
+[Fri Oct 20 12:30:44 2023]
+Finished job 14.
+10 of 39 steps (26%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:44 2023]
+Job 13: 
+        Subsample all sequences by 'background_sequence' scheme for build 'ph_HK_noRoot' with the following parameters:
+
+         - group by: --group-by country year month
+         - sequences per group: --sequences-per-group 30
+         - subsample max sequences: 
+         - min-date: 
+         - max-date: --max-date 2022-02-28
+         - 
+         - exclude: --exclude-where country=Philippines 'host!=Human'
+         - include: 
+         - query: 
+         - priority: --priority results/ph_HK_noRoot/priorities_focal_sequences.tsv
+        
+Reason: Missing output files: results/ph_HK_noRoot/sample-background_sequence.txt; Input files updated by another job: results/sanitized_metadata_gisaid_data.tsv.xz, results/ph_HK_noRoot/priorities_focal_sequences.tsv
+
+
+        augur filter             --metadata results/sanitized_metadata_gisaid_data.tsv.xz             --include defaults/include.txt             --exclude defaults/exclude.txt                          --max-date 2022-02-28             --exclude-where country=Philippines 'host!=Human'                                                    --priority results/ph_HK_noRoot/priorities_focal_sequences.tsv             --group-by country year month             --sequences-per-group 30                                       --output-strains results/ph_HK_noRoot/sample-background_sequence.txt 2>&1 | tee logs/subsample_ph_HK_noRoot_background_sequence.txt
+        
+[Fri Oct 20 12:30:45 2023]
+Finished job 13.
+11 of 39 steps (28%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:45 2023]
+Job 9: 
+        Combine and deduplicate FASTAs
+        
+Reason: Missing output files: results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz, results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz; Input files updated by another job: results/aligned_gisaid_data.fasta.xz, results/ph_HK_noRoot/sample-focal_sequences.txt, results/sanitized_metadata_gisaid_data.tsv.xz, results/ph_HK_noRoot/sample-background_sequence.txt
+
+
+        augur filter             --sequences results/aligned_gisaid_data.fasta.xz             --metadata results/sanitized_metadata_gisaid_data.tsv.xz             --exclude-all             --include results/ph_HK_noRoot/sample-focal_sequences.txt results/ph_HK_noRoot/sample-background_sequence.txt             --output-sequences results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz             --output-metadata results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz 2>&1 | tee logs/subsample_regions_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:30:50 2023]
+Finished job 9.
+12 of 39 steps (31%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:50 2023]
+Job 8: 
+        Running nextclade QC and aligning sequences
+            - gaps relative to reference are considered real
+        
+Reason: Missing output files: results/ph_HK_noRoot/translations/aligned.gene.M.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF1b.fasta, results/ph_HK_noRoot/aligned.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7a.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF1a.fasta, results/ph_HK_noRoot/nextclade_qc.tsv, results/ph_HK_noRoot/translations/aligned.gene.N.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF3a.fasta, results/ph_HK_noRoot/translations/aligned.gene.E.fasta, results/ph_HK_noRoot/translations/aligned.gene.S.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7b.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF9b.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF8.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF6.fasta; Input files updated by another job: results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz, data/sars-cov-2-nextclade-defaults.zip
+
+
+        python3 scripts/sanitize_sequences.py             --sequences results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz             --strip-prefixes hCoV-19/ SARS-CoV-2/             --output /dev/stdout 2> logs/sanitize_sequences_before_nextclade_ph_HK_noRoot.txt             | nextclade run             --jobs 8             --input-dataset data/sars-cov-2-nextclade-defaults.zip             --output-tsv results/ph_HK_noRoot/nextclade_qc.tsv             --output-fasta results/ph_HK_noRoot/aligned.fasta             --output-translations results/ph_HK_noRoot/translations/aligned.gene.{gene}.fasta             --output-insertions results/ph_HK_noRoot/insertions.tsv 2>&1 | tee logs/align_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:30:54 2023]
+Finished job 8.
+13 of 39 steps (33%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:54 2023]
+rule join_metadata_and_nextclade_qc:
+    input: results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz, results/ph_HK_noRoot/nextclade_qc.tsv
+    output: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv
+    log: logs/join_metadata_and_nextclade_qc_ph_HK_noRoot.txt
+    jobid: 20
+    benchmark: benchmarks/join_metadata_and_nextclade_qc_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv; Input files updated by another job: results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz, results/ph_HK_noRoot/nextclade_qc.tsv
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/join-metadata-and-clades.py             results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz             results/ph_HK_noRoot/nextclade_qc.tsv             -o results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv 2>&1 | tee logs/join_metadata_and_nextclade_qc_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:30:54 2023]
+Job 7: 
+        Mask bases in alignment results/ph_HK_noRoot/aligned.fasta
+          - masking 100 from beginning
+          - masking 200 from end
+          - masking other sites: 21987 21846
+        
+Reason: Missing output files: results/ph_HK_noRoot/masked.fasta; Input files updated by another job: results/ph_HK_noRoot/aligned.fasta
+
+
+        python3 scripts/mask-alignment.py             --alignment results/ph_HK_noRoot/aligned.fasta             --mask-from-beginning 100             --mask-from-end 200             --mask-sites 21987 21846             --mask-terminal-gaps             --output results/ph_HK_noRoot/masked.fasta 2> logs/mask_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:30:55 2023]
+Finished job 20.
+14 of 39 steps (36%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:55 2023]
+Job 22: Scanning metadata results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv for problematic sequences. Removing sequences with >20 deviation from the clock and with more than 1.
+Reason: Missing output files: results/ph_HK_noRoot/excluded_by_diagnostics.txt; Input files updated by another job: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv
+
+
+        python3 scripts/diagnostic.py             --metadata results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv             --clock-filter 20             --contamination 5             --snp-clusters 1                          --output-exclusion-list results/ph_HK_noRoot/excluded_by_diagnostics.txt 2>&1 | tee logs/diagnostics_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:30:56 2023]
+Finished job 7.
+15 of 39 steps (38%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:56 2023]
+Job 21: 
+        Index sequence composition.
+        
+Reason: Missing output files: results/ph_HK_noRoot/sequence_index.tsv; Input files updated by another job: results/ph_HK_noRoot/masked.fasta
+
+
+        augur index             --sequences results/ph_HK_noRoot/masked.fasta             --output results/ph_HK_noRoot/sequence_index.tsv 2>&1 | tee logs/index_sequences_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:30:56 2023]
+Finished job 22.
+16 of 39 steps (41%) done
+[Fri Oct 20 12:30:58 2023]
+Finished job 21.
+17 of 39 steps (44%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:58 2023]
+rule annotate_metadata_with_index:
+    input: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv, results/ph_HK_noRoot/sequence_index.tsv
+    output: results/ph_HK_noRoot/metadata_with_index.tsv
+    log: logs/annotate_metadata_with_index_ph_HK_noRoot.txt
+    jobid: 19
+    benchmark: benchmarks/annotate_metadata_with_index_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/metadata_with_index.tsv; Input files updated by another job: results/ph_HK_noRoot/sequence_index.tsv, results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/annotate_metadata_with_index.py             --metadata results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv             --sequence-index results/ph_HK_noRoot/sequence_index.tsv             --output results/ph_HK_noRoot/metadata_with_index.tsv
+        
+[Fri Oct 20 12:30:59 2023]
+Finished job 19.
+18 of 39 steps (46%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:30:59 2023]
+Job 6: 
+        Filtering alignment results/ph_HK_noRoot/masked.fasta -> results/ph_HK_noRoot/filtered.fasta
+          - excluding strains in defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt
+          - including strains in defaults/include.txt
+          - min length: --query '(_length >= 27000)'
+        
+Reason: Missing output files: results/ph_HK_noRoot/filtered.fasta, results/ph_HK_noRoot/metadata_filtered.tsv.xz; Input files updated by another job: results/ph_HK_noRoot/excluded_by_diagnostics.txt, results/ph_HK_noRoot/masked.fasta, results/ph_HK_noRoot/metadata_with_index.tsv
+
+
+        augur filter             --sequences results/ph_HK_noRoot/masked.fasta             --metadata results/ph_HK_noRoot/metadata_with_index.tsv             --include defaults/include.txt             --query '(_length >= 27000)'             --max-date 2023-10-21             --min-date 2019-12-01             --exclude-ambiguous-dates-by any             --exclude defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt             --exclude-where division='USA'            --output-sequences results/ph_HK_noRoot/filtered.fasta             --output-metadata results/ph_HK_noRoot/metadata_filtered.tsv.xz             --output-log results/ph_HK_noRoot/filtered_log.tsv 2>&1 | tee logs/filtered_ph_HK_noRoot.txt;
+        
+[Fri Oct 20 12:31:01 2023]
+Error in rule filter:
+    jobid: 6
+    input: results/ph_HK_noRoot/masked.fasta, results/ph_HK_noRoot/metadata_with_index.tsv, defaults/include.txt, defaults/exclude.txt, results/ph_HK_noRoot/excluded_by_diagnostics.txt
+    output: results/ph_HK_noRoot/filtered.fasta, results/ph_HK_noRoot/metadata_filtered.tsv.xz, results/ph_HK_noRoot/filtered_log.tsv
+    log: logs/filtered_ph_HK_noRoot.txt (check log file(s) for error details)
+    conda-env: /home/mbl-miguel/thorney_rerun/ncov/.snakemake/conda/eccc640adff87b35bacb48e4f5b80de0_
+    shell:
+        
+        augur filter             --sequences results/ph_HK_noRoot/masked.fasta             --metadata results/ph_HK_noRoot/metadata_with_index.tsv             --include defaults/include.txt             --query '(_length >= 27000)'             --max-date 2023-10-21             --min-date 2019-12-01             --exclude-ambiguous-dates-by any             --exclude defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt             --exclude-where division='USA'            --output-sequences results/ph_HK_noRoot/filtered.fasta             --output-metadata results/ph_HK_noRoot/metadata_filtered.tsv.xz             --output-log results/ph_HK_noRoot/filtered_log.tsv 2>&1 | tee logs/filtered_ph_HK_noRoot.txt;
+        
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job filter since they might be corrupted:
+results/ph_HK_noRoot/filtered.fasta, results/ph_HK_noRoot/metadata_filtered.tsv.xz, results/ph_HK_noRoot/filtered_log.tsv
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-10-20T123030.310770.snakemake.log

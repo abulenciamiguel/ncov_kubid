@@ -1,0 +1,4 @@
+1098 strains were dropped during filtering
+	1780 of these were dropped by `--exclude-all`
+	682 strains were added back because they were in results/ph_HK_noRoot/sample-focal_sequences.txt
+682 strains passed all filters

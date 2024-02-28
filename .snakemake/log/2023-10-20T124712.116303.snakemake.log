@@ -1,0 +1,252 @@
+Config file defaults/parameters.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /home/mbl-miguel/.nextstrain/runtimes/conda/env/bin/bash
+Provided cores: 448
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Job stats:
+job                      count
+---------------------  -------
+all                          1
+ancestral                    1
+assign_rbd_levels            1
+clades                       1
+colors                       1
+distances                    1
+emerging_lineages            1
+export                       1
+finalize                     1
+include_hcov19_prefix        1
+logistic_growth              1
+mutational_fitness           1
+refine                       1
+tip_frequencies              1
+traits                       1
+translate                    1
+total                       16
+
+Select jobs to execute...
+
+[Fri Oct 20 12:47:12 2023]
+Job 4: 
+        Refining tree
+          - estimate timetree
+          - use opt coalescent timescale
+          - estimate marginal node dates
+        
+Reason: Missing output files: results/ph_HK_noRoot/branch_lengths.json, results/ph_HK_noRoot/tree.nwk
+
+
+        augur refine             --tree results/ph_HK_noRoot/tree_raw.nwk             --alignment results/ph_HK_noRoot/filtered.fasta             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --output-tree results/ph_HK_noRoot/tree.nwk             --output-node-data results/ph_HK_noRoot/branch_lengths.json             --timetree             --stochastic-resolve             --clock-rate 0.0008             --clock-std-dev 0.0004             --coalescent opt             --date-inference marginal             --divergence-unit mutations             --date-confidence             --no-covariance             --clock-filter-iqd 8 2>&1 | tee logs/refine_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:56:18 2023]
+Finished job 4.
+1 of 16 steps (6%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:18 2023]
+Job 25: Translating amino acid sequences
+Reason: Missing output files: results/ph_HK_noRoot/translations/aligned.gene.ORF1b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF8_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF1a_withInternalNodes.fasta, results/ph_HK_noRoot/aa_muts.json, results/ph_HK_noRoot/translations/aligned.gene.E_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.N_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF3a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF6_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF9b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.M_withInternalNodes.fasta; Input files updated by another job: results/ph_HK_noRoot/tree.nwk
+
+
+        python3 scripts/explicit_translation.py             --tree results/ph_HK_noRoot/tree.nwk             --reference defaults/reference_seq.gb             --translations results/ph_HK_noRoot/translations/aligned.gene.ORF1a.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF1b.fasta results/ph_HK_noRoot/translations/aligned.gene.S.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF3a.fasta results/ph_HK_noRoot/translations/aligned.gene.E.fasta results/ph_HK_noRoot/translations/aligned.gene.M.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF6.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF7a.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF7b.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF8.fasta results/ph_HK_noRoot/translations/aligned.gene.N.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF9b.fasta             --genes ORF1a ORF1b S ORF3a E M ORF6 ORF7a ORF7b ORF8 N ORF9b             --output results/ph_HK_noRoot/aa_muts.json 2>&1 | tee logs/aamuts_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:56:18 2023]
+Job 30: 
+        Inferring ancestral traits for ['country']
+          - increase uncertainty of reconstruction by 2.5 to partially account for sampling bias
+        
+Reason: Missing output files: results/ph_HK_noRoot/traits.json; Input files updated by another job: results/ph_HK_noRoot/tree.nwk
+
+
+        augur traits             --tree results/ph_HK_noRoot/tree.nwk             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --output results/ph_HK_noRoot/traits.json             --columns country             --confidence             --sampling-bias-correction 2.5 2>&1 | tee logs/traits_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:56:18 2023]
+Job 32: Estimating censored KDE frequencies for tips
+Reason: Missing output files: results/ph_HK_noRoot/tip-frequencies.json; Input files updated by another job: results/ph_HK_noRoot/tree.nwk
+
+
+        augur frequencies             --method kde             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --tree results/ph_HK_noRoot/tree.nwk             --min-date 2022.804109589041             --max-date 2023.8013698630136             --pivot-interval 1             --pivot-interval-units weeks             --narrow-bandwidth 0.041             --proportion-wide 0.0             --output results/ph_HK_noRoot/tip-frequencies.json 2>&1 | tee logs/tip_frequencies_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:56:18 2023]
+Job 24: 
+        Reconstructing ancestral sequences and mutations
+          - inferring ambiguous mutations
+        
+Reason: Missing output files: results/ph_HK_noRoot/nt_muts.json; Input files updated by another job: results/ph_HK_noRoot/tree.nwk
+
+
+        augur ancestral             --tree results/ph_HK_noRoot/tree.nwk             --alignment results/ph_HK_noRoot/aligned.fasta             --output-node-data results/ph_HK_noRoot/nt_muts.json             --inference joint             --infer-ambiguous 2>&1 | tee logs/ancestral_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:56:20 2023]
+Finished job 32.
+2 of 16 steps (12%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:20 2023]
+rule logistic_growth:
+    input: results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/tip-frequencies.json
+    output: results/ph_HK_noRoot/logistic_growth.json
+    log: logs/logistic_growth_ph_HK_noRoot.txt
+    jobid: 31
+    benchmark: benchmarks/logistic_growth_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/logistic_growth.json; Input files updated by another job: results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/tip-frequencies.json
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp, mem_mb=256, mem_mib=245
+
+
+        python3 scripts/calculate_delta_frequency.py             --tree results/ph_HK_noRoot/tree.nwk             --frequencies results/ph_HK_noRoot/tip-frequencies.json             --method logistic             --delta-pivots 6             --min-tips 50             --min-frequency 1e-06             --max-frequency 0.95             --attribute-name logistic_growth             --output results/ph_HK_noRoot/logistic_growth.json 2>&1 | tee logs/logistic_growth_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:56:21 2023]
+Finished job 31.
+3 of 16 steps (19%) done
+[Fri Oct 20 12:56:29 2023]
+Finished job 30.
+4 of 16 steps (25%) done
+[Fri Oct 20 12:56:44 2023]
+Finished job 25.
+5 of 16 steps (31%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:45 2023]
+rule mutational_fitness:
+    input: results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/translations/aligned.gene.ORF1a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF1b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF3a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.E_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.M_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF6_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF8_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.N_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF9b_withInternalNodes.fasta, defaults/mutational_fitness_distance_map.json
+    output: results/ph_HK_noRoot/mutational_fitness.json
+    log: logs/mutational_fitness_ph_HK_noRoot.txt
+    jobid: 33
+    benchmark: benchmarks/mutational_fitness_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/mutational_fitness.json; Input files updated by another job: results/ph_HK_noRoot/translations/aligned.gene.ORF1b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF8_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF1a_withInternalNodes.fasta, results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/translations/aligned.gene.E_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.N_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF3a_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF6_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF7b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.ORF9b_withInternalNodes.fasta, results/ph_HK_noRoot/translations/aligned.gene.M_withInternalNodes.fasta
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp, mem_mb=2000, mem_mib=1908
+
+
+        augur distance             --tree results/ph_HK_noRoot/tree.nwk             --alignment results/ph_HK_noRoot/translations/aligned.gene.ORF1a_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF1b_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF3a_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.E_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.M_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF6_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF7a_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF7b_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF8_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.N_withInternalNodes.fasta results/ph_HK_noRoot/translations/aligned.gene.ORF9b_withInternalNodes.fasta             --gene-names ORF1a ORF1b S ORF3a E M ORF6 ORF7a ORF7b ORF8 N ORF9b             --compare-to root             --attribute-name mutational_fitness             --map defaults/mutational_fitness_distance_map.json             --output results/ph_HK_noRoot/mutational_fitness.json 2>&1 | tee logs/mutational_fitness_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:56:45 2023]
+rule distances:
+    input: results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, defaults/distance_maps/S1.json
+    output: results/ph_HK_noRoot/distances.json
+    jobid: 34
+    reason: Missing output files: results/ph_HK_noRoot/distances.json; Input files updated by another job: results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, results/ph_HK_noRoot/tree.nwk
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        augur distance             --tree results/ph_HK_noRoot/tree.nwk             --alignment results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta             --gene-names S             --compare-to root             --attribute-name S1_mutations             --map defaults/distance_maps/S1.json             --output results/ph_HK_noRoot/distances.json
+        
+[Fri Oct 20 12:56:46 2023]
+Finished job 34.
+6 of 16 steps (38%) done
+[Fri Oct 20 12:56:48 2023]
+Finished job 33.
+7 of 16 steps (44%) done
+[Fri Oct 20 12:56:49 2023]
+Finished job 24.
+8 of 16 steps (50%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:49 2023]
+Job 26: Adding internal clade labels
+Reason: Missing output files: results/ph_HK_noRoot/clades.json; Input files updated by another job: results/ph_HK_noRoot/aa_muts.json, results/ph_HK_noRoot/nt_muts.json, results/ph_HK_noRoot/tree.nwk
+
+
+        augur clades --tree results/ph_HK_noRoot/tree.nwk             --mutations results/ph_HK_noRoot/nt_muts.json results/ph_HK_noRoot/aa_muts.json             --clades results/ph_HK_noRoot/clades.tsv             --output-node-data results/ph_HK_noRoot/clades.json 2>&1 | tee logs/clades_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:56:49 2023]
+Job 28: Adding emerging clade labels
+Reason: Missing output files: results/ph_HK_noRoot/emerging_lineages.json; Input files updated by another job: results/ph_HK_noRoot/aa_muts.json, results/ph_HK_noRoot/nt_muts.json, results/ph_HK_noRoot/tree.nwk
+
+
+        augur clades --tree results/ph_HK_noRoot/tree.nwk             --mutations results/ph_HK_noRoot/nt_muts.json results/ph_HK_noRoot/aa_muts.json             --clades defaults/emerging_lineages.tsv             --membership-name emerging_lineage             --label-name emerging_lineage             --output-node-data results/ph_HK_noRoot/emerging_lineages.json 2>&1 | tee logs/emerging_lineages_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:56:51 2023]
+Finished job 26.
+9 of 16 steps (56%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:51 2023]
+rule assign_rbd_levels:
+    input: results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, results/ph_HK_noRoot/clades.json, results/ph_HK_noRoot/tree.nwk
+    output: results/ph_HK_noRoot/rbd_levels.json
+    jobid: 36
+    benchmark: benchmarks/assign_levels_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/rbd_levels.json; Input files updated by another job: results/ph_HK_noRoot/clades.json, results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta, results/ph_HK_noRoot/tree.nwk
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/assign_rbd_levels.py             --spike-alignment results/ph_HK_noRoot/translations/aligned.gene.S_withInternalNodes.fasta             --config defaults/rbd_levels.yaml             --clades-node-data results/ph_HK_noRoot/clades.json             --basal-clade-label '21L (Omicron)'             --tree results/ph_HK_noRoot/tree.nwk             --output-node-data results/ph_HK_noRoot/rbd_levels.json 2>&1 | tee 
+        
+
+[Fri Oct 20 12:56:51 2023]
+Job 37: Constructing colors file
+Reason: Missing output files: results/ph_HK_noRoot/colors.tsv; Input files updated by another job: results/ph_HK_noRoot/clades.json
+
+
+        python3 scripts/assign-colors.py             --ordering defaults/color_ordering.tsv             --color-schemes defaults/color_schemes.tsv             --output results/ph_HK_noRoot/colors.tsv             --clade-node-data results/ph_HK_noRoot/clades.json             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz 2>&1 | tee logs/colors_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:56:51 2023]
+Finished job 28.
+10 of 16 steps (62%) done
+[Fri Oct 20 12:56:51 2023]
+Finished job 36.
+11 of 16 steps (69%) done
+[Fri Oct 20 12:56:53 2023]
+Finished job 37.
+12 of 16 steps (75%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:53 2023]
+Job 3: Exporting data files for Auspice
+Reason: Missing output files: results/ph_HK_noRoot/ncov_with_accessions_root-sequence.json, results/ph_HK_noRoot/ncov_with_accessions.json; Input files updated by another job: results/ph_HK_noRoot/nt_muts.json, results/ph_HK_noRoot/logistic_growth.json, results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/traits.json, results/ph_HK_noRoot/aa_muts.json, results/ph_HK_noRoot/emerging_lineages.json, results/ph_HK_noRoot/mutational_fitness.json, results/ph_HK_noRoot/clades.json, results/ph_HK_noRoot/distances.json, results/ph_HK_noRoot/rbd_levels.json, results/ph_HK_noRoot/branch_lengths.json, results/ph_HK_noRoot/colors.tsv
+
+
+        augur export v2             --tree results/ph_HK_noRoot/tree.nwk             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --node-data results/ph_HK_noRoot/branch_lengths.json results/ph_HK_noRoot/nt_muts.json results/ph_HK_noRoot/aa_muts.json results/ph_HK_noRoot/clades.json results/ph_HK_noRoot/emerging_lineages.json results/ph_HK_noRoot/recency.json results/ph_HK_noRoot/traits.json results/ph_HK_noRoot/logistic_growth.json results/ph_HK_noRoot/mutational_fitness.json results/ph_HK_noRoot/distances.json results/ph_HK_noRoot/epiweeks.json results/ph_HK_noRoot/rbd_levels.json             --auspice-config defaults/auspice_config.json             --include-root-sequence             --colors results/ph_HK_noRoot/colors.tsv             --lat-longs defaults/lat_longs.tsv             --title 'Philippine-specific HK wave subsampling, max date 2022-02-28'             --description results/ph_HK_noRoot/description.md             --output results/ph_HK_noRoot/ncov_with_accessions.json 2>&1 | tee logs/export_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:56:56 2023]
+Finished job 3.
+13 of 16 steps (81%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:56 2023]
+Job 2: Rename strains to include hCoV-19/ prefix
+Reason: Missing output files: results/ph_HK_noRoot/ncov_with_hcov19_prefix.json, results/ph_HK_noRoot/tip-frequencies_with_hcov19_prefix.json; Input files updated by another job: results/ph_HK_noRoot/tip-frequencies.json, results/ph_HK_noRoot/ncov_with_accessions.json
+
+
+        python3 ./scripts/include_prefix.py             --input-auspice results/ph_HK_noRoot/ncov_with_accessions.json             --input-tip-frequencies results/ph_HK_noRoot/tip-frequencies.json             --prefix              --output-auspice results/ph_HK_noRoot/ncov_with_hcov19_prefix.json             --output-tip-frequencies results/ph_HK_noRoot/tip-frequencies_with_hcov19_prefix.json
+        
+[Fri Oct 20 12:56:57 2023]
+Finished job 2.
+14 of 16 steps (88%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:57 2023]
+Job 1: Remove extraneous colorings for main build and move frequencies
+Reason: Missing output files: auspice/ncov_ph_HK_noRoot.json, auspice/ncov_ph_HK_noRoot_tip-frequencies.json; Input files updated by another job: results/ph_HK_noRoot/ncov_with_hcov19_prefix.json, results/ph_HK_noRoot/tip-frequencies_with_hcov19_prefix.json, results/ph_HK_noRoot/ncov_with_accessions_root-sequence.json
+
+
+        python3 scripts/fix-colorings.py             --input results/ph_HK_noRoot/ncov_with_hcov19_prefix.json             --output auspice/ncov_ph_HK_noRoot.json 2>&1 | tee logs/fix_colorings_ph_HK_noRoot.txt &&
+        cp results/ph_HK_noRoot/tip-frequencies_with_hcov19_prefix.json auspice/ncov_ph_HK_noRoot_tip-frequencies.json &&
+        cp results/ph_HK_noRoot/ncov_with_accessions_root-sequence.json auspice/ncov_ph_HK_noRoot_root-sequence.json
+        
+[Fri Oct 20 12:56:58 2023]
+Finished job 1.
+15 of 16 steps (94%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:56:58 2023]
+localrule all:
+    input: auspice/ncov_ph_HK_noRoot.json, auspice/ncov_ph_HK_noRoot_tip-frequencies.json
+    jobid: 0
+    reason: Input files updated by another job: auspice/ncov_ph_HK_noRoot.json, auspice/ncov_ph_HK_noRoot_tip-frequencies.json
+    resources: tmpdir=/tmp
+
+[Fri Oct 20 12:56:58 2023]
+Finished job 0.
+16 of 16 steps (100%) done
+Complete log: .snakemake/log/2023-10-20T124712.116303.snakemake.log

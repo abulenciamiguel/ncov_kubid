@@ -1,0 +1,34 @@
+inputs:
+  - name: "gisaid_data"
+    metadata: "/home/mbl-miguel/thorney_rerun/preprocess/GISAID.metadata_HK.Date.Coverage.Lineage.tsv"
+    sequences: "/home/mbl-miguel/thorney_rerun/preprocess/HK.Date.Coverage.Lineage.fasta"
+
+
+
+builds:
+ ph_HK_noRoot:
+   title: "Philippine-specific HK wave subsampling, max date 2022-02-28"
+   subsampling_scheme: ph_HK_noRoot
+   country: "Philippines"
+   subsample_seed: 100
+
+
+
+subsampling:
+  ph_HK_noRoot:
+    focal_sequences:
+      exclude: "--exclude-where 'country!={country}' 'host!=Human'"
+      max_date: "--max-date '2022-02-28'"
+      group_by: "division year month"
+      seq_per_group: 30
+
+    background_sequence:
+      exclude: "--exclude-where 'country={country}' 'host!=Human'"
+      max_date: "--max-date '2022-02-28'"
+      group_by: "country year month"
+      seq_per_group: 30
+
+      priorities:
+        type: proximity
+        focus: focal_sequences
+      subsample_seed: "{subsample_seed}"

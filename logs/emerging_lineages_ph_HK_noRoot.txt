@@ -1,0 +1,59 @@
+Validating schema of 'results/ph_HK_noRoot/nt_muts.json'...
+Validating schema of 'results/ph_HK_noRoot/aa_muts.json'...
+WARNING in augur.clades: sequences at the root node have not been specified for {ORF7b, ORF8, S, ORF7a, ORF9b, E, N, ORF1b, ORF3a, ORF6, M, ORF1a}, even though mutations were observed. Clades which are annotated using bases/codons present at the root of the tree may not be correctly inferred.
+WARNING in augur.clades: clade '23F' not found in tree!
+WARNING in augur.clades: clade 'XAY' not found in tree!
+WARNING in augur.clades: clade '20F' not found in tree!
+WARNING in augur.clades: clade 'XBB.1.9.1' not found in tree!
+WARNING in augur.clades: clade 'XBC' not found in tree!
+WARNING in augur.clades: clade '21I' not found in tree!
+WARNING in augur.clades: clade 'XBB.1.5.70' not found in tree!
+WARNING in augur.clades: clade 'FE.1' not found in tree!
+WARNING in augur.clades: clade '21F' not found in tree!
+WARNING in augur.clades: clade 'FL.1.5.1' not found in tree!
+WARNING in augur.clades: clade 'XBB.1.22.1' not found in tree!
+WARNING in augur.clades: clade '21B' not found in tree!
+WARNING in augur.clades: clade '21H' not found in tree!
+WARNING in augur.clades: clade '23D' not found in tree!
+WARNING in augur.clades: clade '22A' not found in tree!
+WARNING in augur.clades: clade '20J' not found in tree!
+WARNING in augur.clades: clade 'DV.7.1' not found in tree!
+WARNING in augur.clades: clade '19B' not found in tree!
+WARNING in augur.clades: clade 'BA.2.3.20' not found in tree!
+WARNING in augur.clades: clade '21D' not found in tree!
+WARNING in augur.clades: clade '20G' not found in tree!
+WARNING in augur.clades: clade '20E' not found in tree!
+WARNING in augur.clades: clade '23E' not found in tree!
+WARNING in augur.clades: clade '23C' not found in tree!
+WARNING in augur.clades: clade '20D' not found in tree!
+WARNING in augur.clades: clade 'BA.2.86' not found in tree!
+WARNING in augur.clades: clade '20H' not found in tree!
+WARNING in augur.clades: clade '21L' not found in tree!
+WARNING in augur.clades: clade '20A' not found in tree!
+WARNING in augur.clades: clade 'HV.1' not found in tree!
+WARNING in augur.clades: clade '22B' not found in tree!
+WARNING in augur.clades: clade 'BN.1' not found in tree!
+WARNING in augur.clades: clade '21K' not found in tree!
+WARNING in augur.clades: clade '21G' not found in tree!
+WARNING in augur.clades: clade '20C' not found in tree!
+WARNING in augur.clades: clade '22D' not found in tree!
+WARNING in augur.clades: clade '21E' not found in tree!
+WARNING in augur.clades: clade 'HK.3' not found in tree!
+WARNING in augur.clades: clade '20I' not found in tree!
+WARNING in augur.clades: clade '21M' not found in tree!
+WARNING in augur.clades: clade '21J' not found in tree!
+WARNING in augur.clades: clade '21C' not found in tree!
+WARNING in augur.clades: clade '21A' not found in tree!
+WARNING in augur.clades: clade 'GW.5' not found in tree!
+WARNING in augur.clades: clade 'XBB.1.16.6' not found in tree!
+WARNING in augur.clades: clade 'XBB.1.42' not found in tree!
+WARNING in augur.clades: clade '19A' not found in tree!
+WARNING in augur.clades: clade '22C' not found in tree!
+WARNING in augur.clades: clade '22F' not found in tree!
+WARNING in augur.clades: clade '22E' not found in tree!
+WARNING in augur.clades: clade '23A' not found in tree!
+WARNING in augur.clades: clade '23B' not found in tree!
+WARNING in augur.clades: clade 'XBB.1.17.1' not found in tree!
+Clade membership stored on nodes → <node_name> → emerging_lineage
+Clade labels stored on branches → <node_name> → labels → emerging_lineage
+Clades written to results/ph_HK_noRoot/emerging_lineages.json

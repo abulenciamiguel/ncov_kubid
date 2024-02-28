@@ -1,0 +1,126 @@
+Config file defaults/parameters.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /home/mbl-miguel/.nextstrain/runtimes/conda/env/bin/bash
+Provided cores: 448
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Job stats:
+job                        count
+-----------------------  -------
+adjust_metadata_regions        1
+all                            1
+ancestral                      1
+assign_rbd_levels              1
+calculate_epiweeks             1
+clades                         1
+colors                         1
+distances                      1
+emerging_lineages              1
+export                         1
+filter                         1
+finalize                       1
+include_hcov19_prefix          1
+logistic_growth                1
+mutational_fitness             1
+recency                        1
+refine                         1
+tip_frequencies                1
+traits                         1
+translate                      1
+tree                           1
+total                         21
+
+Select jobs to execute...
+
+[Fri Oct 20 12:37:48 2023]
+Job 6: 
+        Filtering alignment results/ph_HK_noRoot/masked.fasta -> results/ph_HK_noRoot/filtered.fasta
+          - excluding strains in defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt
+          - including strains in defaults/include.txt
+          - min length: --query '(_length >= 27000)'
+        
+Reason: Missing output files: results/ph_HK_noRoot/filtered.fasta, results/ph_HK_noRoot/metadata_filtered.tsv.xz
+
+
+        augur filter             --sequences results/ph_HK_noRoot/masked.fasta             --metadata results/ph_HK_noRoot/metadata_with_index.tsv             --include defaults/include.txt             --query '(_length >= 27000)'             --max-date 2023-10-21             --min-date 2019-12-01             --exclude-ambiguous-dates-by any             --exclude defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt             --exclude-where division='USA'            --output-sequences results/ph_HK_noRoot/filtered.fasta             --output-metadata results/ph_HK_noRoot/metadata_filtered.tsv.xz             --output-log results/ph_HK_noRoot/filtered_log.tsv 2>&1 | tee logs/filtered_ph_HK_noRoot.txt;
+        
+[Fri Oct 20 12:37:50 2023]
+Finished job 6.
+1 of 21 steps (5%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:37:50 2023]
+Job 23: 
+        Adjusting metadata for build 'ph_HK_noRoot'
+        
+Reason: Missing output files: results/ph_HK_noRoot/metadata_adjusted.tsv.xz; Input files updated by another job: results/ph_HK_noRoot/metadata_filtered.tsv.xz
+
+
+        python3 scripts/adjust_regional_meta.py             --region global             --metadata results/ph_HK_noRoot/metadata_filtered.tsv.xz             --output results/ph_HK_noRoot/metadata_adjusted.tsv.xz 2>&1 | tee logs/adjust_metadata_regions_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:37:50 2023]
+Job 5: Building tree
+Reason: Missing output files: results/ph_HK_noRoot/tree_raw.nwk; Input files updated by another job: results/ph_HK_noRoot/filtered.fasta
+
+
+        augur tree             --alignment results/ph_HK_noRoot/filtered.fasta             --tree-builder-args '-ninit 10 -n 4'             --exclude-sites defaults/sites_ignored_for_tree_topology.txt             --output results/ph_HK_noRoot/tree_raw.nwk             --nthreads 8 2>&1 | tee logs/tree_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:37:51 2023]
+Finished job 23.
+2 of 21 steps (10%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:37:51 2023]
+rule calculate_epiweeks:
+    input: results/ph_HK_noRoot/metadata_adjusted.tsv.xz
+    output: results/ph_HK_noRoot/epiweeks.json
+    log: logs/calculate_epiweeks_ph_HK_noRoot.txt
+    jobid: 35
+    benchmark: benchmarks/calculate_epiweeks_ph_HK_noRoot.txt
+    reason: Missing output files: results/ph_HK_noRoot/epiweeks.json; Input files updated by another job: results/ph_HK_noRoot/metadata_adjusted.tsv.xz
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/calculate_epiweek.py             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --metadata-id-columns strain name 'Virus name'             --output-node-data results/ph_HK_noRoot/epiweeks.json 2>&1 | tee logs/calculate_epiweeks_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:37:51 2023]
+Job 29: Use metadata on submission date to construct submission recency field
+Reason: Missing output files: results/ph_HK_noRoot/recency.json; Input files updated by another job: results/ph_HK_noRoot/metadata_adjusted.tsv.xz
+
+
+        python3 scripts/construct-recency-from-submission-date.py             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --output results/ph_HK_noRoot/recency.json 2>&1 | tee logs/recency_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:37:52 2023]
+Finished job 29.
+3 of 21 steps (14%) done
+[Fri Oct 20 12:37:52 2023]
+Finished job 35.
+4 of 21 steps (19%) done
+[Fri Oct 20 12:39:10 2023]
+Finished job 5.
+5 of 21 steps (24%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:39:10 2023]
+Job 4: 
+        Refining tree
+          - estimate timetree
+          - use opt coalescent timescale
+          - estimate marginal node dates
+        
+Reason: Missing output files: results/ph_HK_noRoot/branch_lengths.json, results/ph_HK_noRoot/tree.nwk; Input files updated by another job: results/ph_HK_noRoot/metadata_adjusted.tsv.xz, results/ph_HK_noRoot/filtered.fasta, results/ph_HK_noRoot/tree_raw.nwk
+
+
+        augur refine             --tree results/ph_HK_noRoot/tree_raw.nwk             --alignment results/ph_HK_noRoot/filtered.fasta             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --output-tree results/ph_HK_noRoot/tree.nwk             --output-node-data results/ph_HK_noRoot/branch_lengths.json             --root Wuhan-Hu-1/2019             --timetree             --stochastic-resolve             --clock-rate 0.0008             --clock-std-dev 0.0004             --coalescent opt             --date-inference marginal             --divergence-unit mutations             --date-confidence             --no-covariance             --clock-filter-iqd 8 2>&1 | tee logs/refine_ph_HK_noRoot.txt
+        
+Waiting at most 5 seconds for missing files.
+MissingOutputException in rule refine in file /home/mbl-miguel/thorney_rerun/ncov/workflow/snakemake_rules/main_workflow.smk, line 814:
+Job 4  completed successfully, but some output files are missing. Missing files after 5 seconds. This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait:
+results/ph_HK_noRoot/tree.nwk
+results/ph_HK_noRoot/branch_lengths.json
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-10-20T123747.489616.snakemake.log

@@ -1,0 +1,303 @@
+Config file defaults/parameters.yaml is extended by additional config specified via the command line.
+Building DAG of jobs...
+Using shell: /home/mbl-miguel/.nextstrain/runtimes/conda/env/bin/bash
+Provided cores: 448
+Rules claiming more threads will be scaled down.
+Conda environments: ignored
+Job stats:
+job                               count
+------------------------------  -------
+adjust_metadata_regions               1
+all                                   1
+ancestral                             1
+annotate_metadata_with_index          1
+assign_rbd_levels                     1
+build_align                           1
+calculate_epiweeks                    1
+clades                                1
+colors                                1
+combine_samples                       1
+diagnostic                            1
+distances                             1
+emerging_lineages                     1
+export                                1
+filter                                1
+finalize                              1
+include_hcov19_prefix                 1
+index                                 1
+join_metadata_and_nextclade_qc        1
+logistic_growth                       1
+mask                                  1
+mutational_fitness                    1
+priority_score                        1
+proximity_score                       1
+recency                               1
+refine                                1
+subsample                             1
+tip_frequencies                       1
+traits                                1
+translate                             1
+tree                                  1
+total                                31
+
+Select jobs to execute...
+
+[Fri Oct 20 12:43:47 2023]
+Job 15: 
+        determine priority for inclusion in as phylogenetic context by
+        genetic similiarity to sequences in focal set for build 'ph_HK_noRoot'.
+        
+Reason: Params have changed since last execution
+
+
+        python3 scripts/get_distance_to_focal_set.py             --reference defaults/reference_seq.fasta             --alignment results/aligned_gisaid_data.fasta.xz             --focal-alignment results/ph_HK_noRoot/sample-focal_sequences.fasta             --ignore-seqs Wuhan/Hu-1/2019             --chunk-size 10000             --output results/ph_HK_noRoot/proximity_focal_sequences.tsv 2>&1 | tee logs/subsampling_proximity_ph_HK_noRoot_focal_sequences.txt
+        
+[Fri Oct 20 12:43:48 2023]
+Finished job 15.
+1 of 31 steps (3%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:43:48 2023]
+rule priority_score:
+    input: results/ph_HK_noRoot/proximity_focal_sequences.tsv, results/combined_sequence_index.tsv.xz
+    output: results/ph_HK_noRoot/priorities_focal_sequences.tsv
+    jobid: 14
+    benchmark: benchmarks/priority_score_ph_HK_noRoot_focal_sequences.txt
+    reason: Input files updated by another job: results/ph_HK_noRoot/proximity_focal_sequences.tsv
+    wildcards: build_name=ph_HK_noRoot, focus=focal_sequences
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/priorities.py             --sequence-index results/combined_sequence_index.tsv.xz             --proximities results/ph_HK_noRoot/proximity_focal_sequences.tsv             --crowding-penalty 0.1             --Nweight 0.003             --output results/ph_HK_noRoot/priorities_focal_sequences.tsv 2>&1 | tee 
+        
+[Fri Oct 20 12:43:50 2023]
+Finished job 14.
+2 of 31 steps (6%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:43:50 2023]
+Job 13: 
+        Subsample all sequences by 'background_sequence' scheme for build 'ph_HK_noRoot' with the following parameters:
+
+         - group by: --group-by country year month
+         - sequences per group: --sequences-per-group 30
+         - subsample max sequences: 
+         - min-date: 
+         - max-date: --max-date 2022-02-28
+         - 
+         - exclude: --exclude-where country=Philippines 'host!=Human'
+         - include: 
+         - query: 
+         - priority: --priority results/ph_HK_noRoot/priorities_focal_sequences.tsv
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/priorities_focal_sequences.tsv
+
+
+        augur filter             --metadata results/sanitized_metadata_gisaid_data.tsv.xz             --include defaults/include.txt             --exclude defaults/exclude.txt                          --max-date 2022-02-28             --exclude-where country=Philippines 'host!=Human'                                                    --priority results/ph_HK_noRoot/priorities_focal_sequences.tsv             --group-by country year month             --sequences-per-group 30                                       --output-strains results/ph_HK_noRoot/sample-background_sequence.txt 2>&1 | tee logs/subsample_ph_HK_noRoot_background_sequence.txt
+        
+[Fri Oct 20 12:43:51 2023]
+Finished job 13.
+3 of 31 steps (10%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:43:51 2023]
+Job 9: 
+        Combine and deduplicate FASTAs
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/sample-background_sequence.txt
+
+
+        augur filter             --sequences results/aligned_gisaid_data.fasta.xz             --metadata results/sanitized_metadata_gisaid_data.tsv.xz             --exclude-all             --include results/ph_HK_noRoot/sample-focal_sequences.txt results/ph_HK_noRoot/sample-background_sequence.txt             --output-sequences results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz             --output-metadata results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz 2>&1 | tee logs/subsample_regions_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:43:56 2023]
+Finished job 9.
+4 of 31 steps (13%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:43:56 2023]
+Job 8: 
+        Running nextclade QC and aligning sequences
+            - gaps relative to reference are considered real
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz
+
+
+        python3 scripts/sanitize_sequences.py             --sequences results/ph_HK_noRoot/ph_HK_noRoot_subsampled_sequences.fasta.xz             --strip-prefixes hCoV-19/ SARS-CoV-2/             --output /dev/stdout 2> logs/sanitize_sequences_before_nextclade_ph_HK_noRoot.txt             | nextclade run             --jobs 8             --input-dataset data/sars-cov-2-nextclade-defaults.zip             --output-tsv results/ph_HK_noRoot/nextclade_qc.tsv             --output-fasta results/ph_HK_noRoot/aligned.fasta             --output-translations results/ph_HK_noRoot/translations/aligned.gene.{gene}.fasta             --output-insertions results/ph_HK_noRoot/insertions.tsv 2>&1 | tee logs/align_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:44:00 2023]
+Finished job 8.
+5 of 31 steps (16%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:00 2023]
+Job 7: 
+        Mask bases in alignment results/ph_HK_noRoot/aligned.fasta
+          - masking 100 from beginning
+          - masking 200 from end
+          - masking other sites: 21987 21846
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/aligned.fasta
+
+
+        python3 scripts/mask-alignment.py             --alignment results/ph_HK_noRoot/aligned.fasta             --mask-from-beginning 100             --mask-from-end 200             --mask-sites 21987 21846             --mask-terminal-gaps             --output results/ph_HK_noRoot/masked.fasta 2> logs/mask_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:44:00 2023]
+rule join_metadata_and_nextclade_qc:
+    input: results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz, results/ph_HK_noRoot/nextclade_qc.tsv
+    output: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv
+    log: logs/join_metadata_and_nextclade_qc_ph_HK_noRoot.txt
+    jobid: 20
+    benchmark: benchmarks/join_metadata_and_nextclade_qc_ph_HK_noRoot.txt
+    reason: Input files updated by another job: results/ph_HK_noRoot/nextclade_qc.tsv, results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/join-metadata-and-clades.py             results/ph_HK_noRoot/ph_HK_noRoot_subsampled_metadata.tsv.xz             results/ph_HK_noRoot/nextclade_qc.tsv             -o results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv 2>&1 | tee logs/join_metadata_and_nextclade_qc_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:44:00 2023]
+Finished job 20.
+6 of 31 steps (19%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:00 2023]
+Job 22: Scanning metadata results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv for problematic sequences. Removing sequences with >20 deviation from the clock and with more than 1.
+Reason: Input files updated by another job: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv
+
+
+        python3 scripts/diagnostic.py             --metadata results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv             --clock-filter 20             --contamination 5             --snp-clusters 1                          --output-exclusion-list results/ph_HK_noRoot/excluded_by_diagnostics.txt 2>&1 | tee logs/diagnostics_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:44:01 2023]
+Finished job 7.
+7 of 31 steps (23%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:01 2023]
+Job 21: 
+        Index sequence composition.
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/masked.fasta
+
+
+        augur index             --sequences results/ph_HK_noRoot/masked.fasta             --output results/ph_HK_noRoot/sequence_index.tsv 2>&1 | tee logs/index_sequences_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:44:02 2023]
+Finished job 22.
+8 of 31 steps (26%) done
+[Fri Oct 20 12:44:03 2023]
+Finished job 21.
+9 of 31 steps (29%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:03 2023]
+rule annotate_metadata_with_index:
+    input: results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv, results/ph_HK_noRoot/sequence_index.tsv
+    output: results/ph_HK_noRoot/metadata_with_index.tsv
+    log: logs/annotate_metadata_with_index_ph_HK_noRoot.txt
+    jobid: 19
+    benchmark: benchmarks/annotate_metadata_with_index_ph_HK_noRoot.txt
+    reason: Input files updated by another job: results/ph_HK_noRoot/sequence_index.tsv, results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/annotate_metadata_with_index.py             --metadata results/ph_HK_noRoot/metadata_with_nextclade_qc.tsv             --sequence-index results/ph_HK_noRoot/sequence_index.tsv             --output results/ph_HK_noRoot/metadata_with_index.tsv
+        
+[Fri Oct 20 12:44:04 2023]
+Finished job 19.
+10 of 31 steps (32%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:04 2023]
+Job 6: 
+        Filtering alignment results/ph_HK_noRoot/masked.fasta -> results/ph_HK_noRoot/filtered.fasta
+          - excluding strains in defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt
+          - including strains in defaults/include.txt
+          - min length: --query '(_length >= 27000)'
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/metadata_with_index.tsv, results/ph_HK_noRoot/excluded_by_diagnostics.txt, results/ph_HK_noRoot/masked.fasta
+
+
+        augur filter             --sequences results/ph_HK_noRoot/masked.fasta             --metadata results/ph_HK_noRoot/metadata_with_index.tsv             --include defaults/include.txt             --query '(_length >= 27000)'             --max-date 2023-10-21             --min-date 2019-12-01             --exclude-ambiguous-dates-by any             --exclude defaults/exclude.txt results/ph_HK_noRoot/excluded_by_diagnostics.txt             --exclude-where division='USA'            --output-sequences results/ph_HK_noRoot/filtered.fasta             --output-metadata results/ph_HK_noRoot/metadata_filtered.tsv.xz             --output-log results/ph_HK_noRoot/filtered_log.tsv 2>&1 | tee logs/filtered_ph_HK_noRoot.txt;
+        
+[Fri Oct 20 12:44:07 2023]
+Finished job 6.
+11 of 31 steps (35%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:07 2023]
+Job 5: Building tree
+Reason: Input files updated by another job: results/ph_HK_noRoot/filtered.fasta
+
+
+        augur tree             --alignment results/ph_HK_noRoot/filtered.fasta             --tree-builder-args '-ninit 10 -n 4'             --exclude-sites defaults/sites_ignored_for_tree_topology.txt             --output results/ph_HK_noRoot/tree_raw.nwk             --nthreads 8 2>&1 | tee logs/tree_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:44:07 2023]
+Job 23: 
+        Adjusting metadata for build 'ph_HK_noRoot'
+        
+Reason: Input files updated by another job: results/ph_HK_noRoot/metadata_filtered.tsv.xz
+
+
+        python3 scripts/adjust_regional_meta.py             --region global             --metadata results/ph_HK_noRoot/metadata_filtered.tsv.xz             --output results/ph_HK_noRoot/metadata_adjusted.tsv.xz 2>&1 | tee logs/adjust_metadata_regions_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:44:07 2023]
+Finished job 23.
+12 of 31 steps (39%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:44:07 2023]
+rule calculate_epiweeks:
+    input: results/ph_HK_noRoot/metadata_adjusted.tsv.xz
+    output: results/ph_HK_noRoot/epiweeks.json
+    log: logs/calculate_epiweeks_ph_HK_noRoot.txt
+    jobid: 35
+    benchmark: benchmarks/calculate_epiweeks_ph_HK_noRoot.txt
+    reason: Input files updated by another job: results/ph_HK_noRoot/metadata_adjusted.tsv.xz
+    wildcards: build_name=ph_HK_noRoot
+    resources: tmpdir=/tmp
+
+
+        python3 scripts/calculate_epiweek.py             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --metadata-id-columns strain name 'Virus name'             --output-node-data results/ph_HK_noRoot/epiweeks.json 2>&1 | tee logs/calculate_epiweeks_ph_HK_noRoot.txt
+        
+
+[Fri Oct 20 12:44:07 2023]
+Job 29: Use metadata on submission date to construct submission recency field
+Reason: Input files updated by another job: results/ph_HK_noRoot/metadata_adjusted.tsv.xz
+
+
+        python3 scripts/construct-recency-from-submission-date.py             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --output results/ph_HK_noRoot/recency.json 2>&1 | tee logs/recency_ph_HK_noRoot.txt
+        
+[Fri Oct 20 12:44:09 2023]
+Finished job 29.
+13 of 31 steps (42%) done
+[Fri Oct 20 12:44:09 2023]
+Finished job 35.
+14 of 31 steps (45%) done
+[Fri Oct 20 12:45:17 2023]
+Finished job 5.
+15 of 31 steps (48%) done
+Select jobs to execute...
+
+[Fri Oct 20 12:45:17 2023]
+Job 4: 
+        Refining tree
+          - estimate timetree
+          - use opt coalescent timescale
+          - estimate marginal node dates
+        
+Reason: Missing output files: results/ph_HK_noRoot/tree.nwk, results/ph_HK_noRoot/branch_lengths.json; Input files updated by another job: results/ph_HK_noRoot/filtered.fasta, results/ph_HK_noRoot/metadata_adjusted.tsv.xz, results/ph_HK_noRoot/tree_raw.nwk
+
+
+        augur refine             --tree results/ph_HK_noRoot/tree_raw.nwk             --alignment results/ph_HK_noRoot/filtered.fasta             --metadata results/ph_HK_noRoot/metadata_adjusted.tsv.xz             --output-tree results/ph_HK_noRoot/tree.nwk             --output-node-data results/ph_HK_noRoot/branch_lengths.json             --root Wuhan/Hu-1/2019             --timetree             --stochastic-resolve             --clock-rate 0.0008             --clock-std-dev 0.0004             --coalescent opt             --date-inference marginal             --divergence-unit mutations             --date-confidence             --no-covariance             --clock-filter-iqd 8 2>&1 | tee logs/refine_ph_HK_noRoot.txt
+        
+Waiting at most 5 seconds for missing files.
+MissingOutputException in rule refine in file /home/mbl-miguel/thorney_rerun/ncov/workflow/snakemake_rules/main_workflow.smk, line 814:
+Job 4  completed successfully, but some output files are missing. Missing files after 5 seconds. This might be due to filesystem latency. If that is the case, consider to increase the wait time with --latency-wait:
+results/ph_HK_noRoot/tree.nwk
+results/ph_HK_noRoot/branch_lengths.json
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2023-10-20T124346.319036.snakemake.log
